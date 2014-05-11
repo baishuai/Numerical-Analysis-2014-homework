@@ -5,17 +5,12 @@ import (
 )
 
 var (
-	xinput = []float64{20, 25, 30, 35, 40, 45, 50, 55, 60}
-	yinput = []float64{805, 985, 1170, 1365, 1570, 1790, 2030, 2300, 2610}
-)
-
-var (
-	mSize, nSize      int       //m为点集数，n为拟合曲线次数
-	xVal, yVal, omega []float64 //拟合数据以及权重
-	fx                map[float64]float64
-	aStar             []float64 //拟合曲线系数
-	alpha, beta       []float64 //计算Pk需要的中间值
-	pFunc             []func(float64) float64
+	mSize, nSize int       //m为点集数，n为拟合曲线次数
+	xVal, omega  []float64 //拟合数据以及权重
+	fx           map[float64]float64
+	aStar        []float64 //拟合曲线系数
+	alpha, beta  []float64 //计算Pk需要的中间值
+	pFunc        []func(float64) float64
 )
 
 func innerProduct(fa, fb func(float64) float64) (ip float64) {
@@ -25,17 +20,21 @@ func innerProduct(fa, fb func(float64) float64) (ip float64) {
 	return ip
 }
 
-
-func prepare(n int) {
-	xVal = xinput
-	yVal = yinput
+func Solve(x, y, om []float64, n int) (func(float64) float64, string) {
+	xVal = x
 	mSize = len(xVal)
 	nSize = n
-	omega = make([]float64, mSize)
+	if om == nil {
+		omega = make([]float64, mSize)
+		for i := 0; i < mSize; i++ {
+			omega[i] = 1.0
+		}
+	} else {
+		omega = om
+	}
 	fx = make(map[float64]float64)
 	for i := 0; i < mSize; i++ {
-		omega[i] = 1.0
-		fx[xVal[i]] = yVal[i]
+		fx[xVal[i]] = y[i]
 	}
 
 	alpha = make([]float64, nSize)
@@ -43,6 +42,20 @@ func prepare(n int) {
 	pFunc = make([]func(float64) float64, nSize)
 	aStar = make([]float64, nSize)
 
+	for i := 0; i < nSize; i++ {
+		pFunc[i] = calcPunck(i)
+		aStar[i] = innerProduct(func(x float64) float64 {
+			return fx[x]
+		}, pFunc[i]) / innerProduct(pFunc[i], pFunc[i])
+	}
+
+	fans := func(x float64) (val float64) {
+		for i := 0; i < nSize; i++ {
+			val += aStar[i] * pFunc[i](x)
+		}
+		return val
+	}
+	return fans, ""
 }
 
 func calcAlpha(k int) float64 {
@@ -76,30 +89,11 @@ func calcPunck(i int) (p func(float64) float64) {
 	return p
 }
 
-func check() {
-	fcheck := func(x float64) (val float64) {
-		for i := 0; i < nSize; i++ {
-			val += aStar[i] * pFunc[i](x)
-		}
-		return val
-	}
-	for i := 0; i < mSize; i++ {
-		fmt.Println(yVal[i], fcheck(xVal[i]))
-	}
-
-}
-
 func main() {
-	prepare(4)
-	for i := 0; i < nSize; i++ {
-		pFunc[i] = calcPunck(i)
-		aStar[i] = innerProduct(func(x float64) float64 {
-			return fx[x]
-		}, pFunc[i]) / innerProduct(pFunc[i], pFunc[i])
+	x := []float64{20, 25, 30, 35, 40, 45, 50, 55, 60}
+	y := []float64{805, 985, 1170, 1365, 1570, 1790, 2030, 2300, 2610}
+	fAns, _ := Solve(x, y, nil, 4)
+	for i := 0; i < len(x); i++ {
+		fmt.Println(y[i], fAns(x[i]))
 	}
-
-	fmt.Println("satar", aStar)
-	fmt.Println("alpha", alpha)
-	fmt.Println("beta", beta)
-	check()
 }

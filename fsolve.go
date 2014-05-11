@@ -99,8 +99,8 @@ func Newton(init float64, f, df func(float64) float64, accu float64) {
 	}
 }
 
-// Info 打印实验信息
-func Info() {
+// 打印实验信息
+func init() {
 	fmt.Println(`实验五-非线性方程求根
 二分法、牛顿法、迭代法
 1. 求解非线性方程
@@ -108,7 +108,6 @@ func Info() {
 }
 
 func main() {
-	Info()
 	BinCalc(-3.0, 3.0, f1, accuracy)
 	fmt.Println("-------------------我是分割线----------------")
 	Newton(0.0, f1, df1, accuracy)
