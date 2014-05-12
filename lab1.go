@@ -36,13 +36,13 @@ func ln2(n int, value float32) float32 {
 //	n		级数公式的n值
 //	value	级数公式在n-1时求到的ln2值
 //	accu	要求的精度
-func ln2Accu(n int, value, accu float32) (int, float32) {
+func ln2Accu(n int, value, accu float32) (int, float32, float32) {
 	value = ln2(n, value)
 	for abs(value-ln2value) >= accu {
 		n++
 		value = ln2(n, value)
 	}
-	return n, value
+	return n, value, abs(value - ln2value)
 }
 
 //Info 打印此实验相关信息
@@ -52,8 +52,8 @@ func Info() {
 }
 
 func main() {
-	n, v := ln2Accu(1, 0.0, epsilon1)
-	fmt.Printf("误差限制:%e n=%d ln2=%.8f\n", epsilon1, n, v)
-	n, v = ln2Accu(n+1, v, epsilon2)
-	fmt.Printf("误差限制:%e n=%d ln2=%.8f\n", epsilon2, n, v)
+	n, v, d := ln2Accu(1, 0.0, epsilon1)
+	fmt.Printf("误差限制:%e n=%d ln2=%.8f dx=%v\n", epsilon1, n, v, d)
+	n, v, d = ln2Accu(n+1, v, epsilon2)
+	fmt.Printf("误差限制:%e n=%d ln2=%.8f dx=%v\n", epsilon2, n, v, d)
 }

@@ -170,6 +170,10 @@ func main() {
 	b[0] = b[0] + 1e-7
 	x = LUb2x(h10, b)
 	fmt.Println(x)
+	r = NormInf(b, martixMulLiner(Hilbert(10), xhat))
+	dx = NormInf(x, xhat)
+	fmt.Println("1e-7", r, dx)
+
 	fmt.Println()
 
 	for i := 3; i < 25; i++ {
