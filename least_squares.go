@@ -154,6 +154,6 @@ func main() {
 	fAns, fstr := Solve(x, y, nil, 4)
 	fmt.Println(fstr)
 	for i := 0; i < len(x); i++ {
-		fmt.Println(x[i], y[i], fAns(x[i]))
+		fmt.Println(x[i], y[i], fAns(x[i]), math.Abs(fAns(x[i])-y[i]))
 	}
 }
