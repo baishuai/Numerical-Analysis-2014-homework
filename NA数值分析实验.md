@@ -10,3 +10,5 @@ fsolve.go 非线性方程求根
 least_squares.go 正交多项式最小二乘拟合
 
 
+
+Direct methods for sparse linear systems.
