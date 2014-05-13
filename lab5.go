@@ -1,3 +1,10 @@
+/*
+* @Author: Bai Shuai
+* @Date:   2014-05-11 20:42:29
+* @Last Modified by:   Bai Shuai
+* @Last Modified time: 2014-05-13 13:13:40
+ */
+
 //非线性方程求根
 //二分法、牛顿法、迭代法
 //1. 求解非线性方程

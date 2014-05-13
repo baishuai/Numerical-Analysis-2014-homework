@@ -1,3 +1,10 @@
+/*
+* @Author: Bai Shuai
+* @Date:   2014-05-12 13:57:18
+* @Last Modified by:   Bai Shuai
+* @Last Modified time: 2014-05-13 13:13:37
+ */
+
 //Iterative Methods for Sparse Linear Systems
 package main
 

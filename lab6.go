@@ -1,3 +1,10 @@
+/*
+* @Author: Bai Shuai
+* @Date:   2014-05-12 18:45:55
+* @Last Modified by:   Bai Shuai
+* @Last Modified time: 2014-05-13 13:13:38
+ */
+
 package main
 
 import (
@@ -5,6 +12,7 @@ import (
 	"math"
 )
 
+// Hilbert 返回n阶Hilbert矩阵
 func Hilbert(n int) [][]float64 {
 	mxh := make([][]float64, n)
 	for i := 0; i < n; i++ {
@@ -16,23 +24,24 @@ func Hilbert(n int) [][]float64 {
 	return mxh
 }
 
+// Comb 计算组合数C(m,n)
 func Comb(m, n int) int {
 	//=m!/((m-n)!*n!)
 	if n == 0 {
 		return 1
-	} else {
-		mnf := n + 1
-		for i := n + 2; i <= m; i++ {
-			mnf *= i
-		}
-		msnf := 1
-		for i := 2; i <= m-n; i++ {
-			msnf *= i
-		}
-		return mnf / msnf
 	}
+	mnf := n + 1
+	for i := n + 2; i <= m; i++ {
+		mnf *= i
+	}
+	msnf := 1
+	for i := 2; i <= m-n; i++ {
+		msnf *= i
+	}
+	return mnf / msnf
 }
 
+// InHilbert 返回n阶Hilbert矩阵的逆矩阵
 func InHilbert(n int) [][]float64 {
 	imxh := make([][]float64, n)
 	for i := 0; i < n; i++ {
@@ -61,6 +70,7 @@ func NormInf(x1, x2 []float64) (xo float64) {
 	return xo
 }
 
+// NormMInf 矩阵m的无穷范数
 func NormMInf(mx [][]float64) (x float64) {
 	for i := 0; i < len(mx); i++ {
 		tmp := 0.0
