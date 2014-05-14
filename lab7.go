@@ -2,7 +2,7 @@
 * @Author: Bai Shuai
 * @Date:   2014-05-12 13:57:18
 * @Last Modified by:   Bai Shuai
-* @Last Modified time: 2014-05-13 13:13:37
+* @Last Modified time: 2014-05-14 18:09:03
  */
 
 //Iterative Methods for Sparse Linear Systems
@@ -49,7 +49,8 @@ func linerB(a float64) []float64 {
 func accuAns(x []float64, a float64, epsilon float64) []float64 {
 	xrt := make([]float64, len(x))
 	for i, xi := range x {
-		xrt[i] = xi*a + (1-a)*(1-math.Pow(math.E, (-xi/epsilon)))/(1-math.Pow(math.E, (-1.0/epsilon)))
+		xrt[i] = xi*a + (1-a)*(1-math.Pow(math.E, (-xi/epsilon)))/
+			(1-math.Pow(math.E, (-1.0/epsilon)))
 	}
 	return xrt
 }
