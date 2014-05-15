@@ -9,7 +9,7 @@
 
 利用级数逼近在限定误差范围求ln(2)的值
 
-## 多项式插值法 [lab2.go](#file-lab2-go) 未做
+## 多项式插值法 [lab2.go](#file-lab2-go) 未完成
 
 Lagrange 差值, Runge 现象  
 三次样条差值

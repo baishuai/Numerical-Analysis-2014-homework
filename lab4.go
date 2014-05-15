@@ -2,7 +2,7 @@
 * @Author: Bai Shuai
 * @Date:   2014-05-14 21:12:12
 * @Last Modified by:   Bai Shuai
-* @Last Modified time: 2014-05-14 21:39:32
+* @Last Modified time: 2014-05-15 10:53:36
  */
 
 package main
@@ -24,15 +24,11 @@ func fPi(x float64) float64 {
 func ComSimpson(f func(float64) float64, a, b float64, n int) float64 {
 	h := (b - a) / float64(n)
 	ans := f(a) + f(b) + 4*f(a+h/2)
-	var xk, xkh float64
+	var xk float64
 	for i := 1; i < n; i++ {
 		xk = a + h*float64(i)
-		fmt.Printf("%.3f ", xk)
-		xkh = xk + h/2
-		fmt.Printf("%.3f ", xkh)
-		ans = ans + 4*f(xkh) + 2*f(xk)
+		ans = ans + 4*f(xk+h/2) + 2*f(xk)
 	}
-	fmt.Println()
 	ans = ans * h / 6
 	return ans
 }
@@ -40,5 +36,4 @@ func ComSimpson(f func(float64) float64, a, b float64, n int) float64 {
 func main() {
 	ln2 := ComSimpson(fLn2, 1, 2, 26)
 	fmt.Println(ln2, ln2-math.Ln2)
-
 }
