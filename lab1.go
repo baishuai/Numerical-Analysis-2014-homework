@@ -2,7 +2,7 @@
 * @Author: Bai Shuai
 * @Date:   2014-05-12 13:53:54
 * @Last Modified by:   Bai Shuai
-* @Last Modified time: 2014-05-13 13:12:31
+* @Last Modified time: 2014-05-17 22:11:33
  */
 
 package main
@@ -59,6 +59,7 @@ func Info() {
 }
 
 func main() {
+	Info()
 	n, v, d := ln2Accu(1, 0.0, epsilon1)
 	fmt.Printf("误差限制:%e n=%d ln2=%.8f dx=%v\n", epsilon1, n, v, d)
 	n, v, d = ln2Accu(n+1, v, epsilon2)

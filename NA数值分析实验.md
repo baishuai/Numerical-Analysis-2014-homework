@@ -41,3 +41,8 @@ Lagrange 差值, Runge 现象
 ## 线性方程组的迭代解法 [lab7.go](#file-lab7-go) 未完成  
 
 用Jacobi法，Gauss-Seidel法和SOR法求解线性方程组的解
+
+## 矩阵特征值问题 [lab8.go](#file-lab8-go) 
+
+幂法求出矩阵按模最大的特征值与对应的特征向量
+
