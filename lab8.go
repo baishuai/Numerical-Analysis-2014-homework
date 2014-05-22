@@ -2,8 +2,14 @@
 * @Author: Bai Shuai
 * @Date:   2014-05-20 15:52:35
 * @Last Modified by:   bai
-* @Last Modified time: 2014-05-21 22:44:17
+* @Last Modified time: 2014-05-22 08:10:12
  */
+
+/*
+go run lab8.go 直接运行，结果如下
+12.254320584751564 [0.6740198074615602 -1 0.8895596427028144]
+98.52169772379699  [-0.6039723423311808 1 -0.2511351305264881 0.14895344557473505]
+*/
 
 package main
 
@@ -53,7 +59,8 @@ func lineDivF(v, u []float64, f float64) {
 	}
 }
 
-func Mifa(mx [][]float64, init []float64, accu float64) (lambda float64, x []float64) {
+//power method
+func PowMethod(mx [][]float64, init []float64, accu float64) (lambda float64, x []float64) {
 
 	length := len(init)
 	k, k1 := 0, 1
@@ -79,9 +86,9 @@ func Mifa(mx [][]float64, init []float64, accu float64) (lambda float64, x []flo
 
 func main() {
 
-	lmd, x := Mifa(mA, []float64{1, 1, 1}, 1e-5)
+	lmd, x := PowMethod(mA, []float64{1, 1, 1}, 1e-5)
 	fmt.Println(lmd, x)
-	lmd, x = Mifa(mB, []float64{1, 1, 1, 1}, 1e-5)
+	lmd, x = PowMethod(mB, []float64{1, 1, 1, 1}, 1e-5)
 	fmt.Println(lmd, x)
 
 }
