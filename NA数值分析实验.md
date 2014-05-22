@@ -1,5 +1,14 @@
 2014年数值分析（蔡懿慈） 实验题解
 
+运行实验代码需要安装go
+安装方法
+ubuntu
+	`sudo apt-get install golang`
+osx
+	`brew install go`
+windows
+	下载二进制文件安装
+
 每个实验独立一个go文件，相互之间没有依赖  
 对于无输入参数的可直接运行`go run labx.go`执行程序,`labx.go`为文件名  
 对于需要输入运行时参数的程序，先执行`go build labx.go`编译代码，

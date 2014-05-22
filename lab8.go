@@ -2,7 +2,7 @@
 * @Author: Bai Shuai
 * @Date:   2014-05-20 15:52:35
 * @Last Modified by:   bai
-* @Last Modified time: 2014-05-22 08:10:12
+* @Last Modified time: 2014-05-22 09:00:46
  */
 
 /*
@@ -59,7 +59,7 @@ func lineDivF(v, u []float64, f float64) {
 	}
 }
 
-//power method
+// PowMethod 幂法迭代求解特征值与对应特征向量
 func PowMethod(mx [][]float64, init []float64, accu float64) (lambda float64, x []float64) {
 
 	length := len(init)
@@ -78,7 +78,6 @@ func PowMethod(mx [][]float64, init []float64, accu float64) (lambda float64, x 
 		matMulLi(mx, u[k], v[k1])
 		//uk = vk/(vk)
 		lineDivF(v[k1], u[k1], macv(v[k1]))
-
 		k1, k = k, k1
 	}
 	return macv(v[k]), u[k]
