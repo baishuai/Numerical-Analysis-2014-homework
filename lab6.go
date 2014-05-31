@@ -1,8 +1,8 @@
 /*
 * @Author: Bai Shuai
 * @Date:   2014-05-12 18:45:55
-* @Last Modified by:   Bai Shuai
-* @Last Modified time: 2014-05-13 13:13:38
+* @Last Modified by:   bai
+* @Last Modified time: 2014-05-31 14:01:21
  */
 
 package main
@@ -61,6 +61,8 @@ func InHilbert(n int) [][]float64 {
 	}
 	return imxh
 }
+
+// NormInf 两个向量误差的无穷范数
 func NormInf(x1, x2 []float64) (xo float64) {
 	for i := 0; i < len(x1); i++ {
 		if math.Abs(x1[i]-x2[i]) > xo {
@@ -84,10 +86,57 @@ func NormMInf(mx [][]float64) (x float64) {
 	return x
 }
 
+// CondInfWithInverse 计算条件数
 func CondInfWithInverse(mx, imx [][]float64) float64 {
 	return NormMInf(mx) * NormMInf(imx)
 }
 
+// A2LL 对矩阵进行LL分解（平方根）
+func A2LL(mx [][]float64) [][]float64 {
+	n := len(mx)
+	for j := 0; j < n; j++ {
+		var tmp float64
+		for k := 0; k < j; k++ {
+			tmp -= mx[j][k] * mx[j][k]
+		}
+		mx[j][j] = math.Sqrt(mx[j][j] - tmp)
+		for i := j + 1; i < n; i++ {
+			var tmp float64
+			for k := 0; k < j; k++ {
+				tmp -= mx[i][k] * mx[j][k]
+			}
+			mx[i][j] = (mx[i][j] - tmp) / mx[j][j]
+		}
+	}
+	return mx
+}
+
+// LLUb2x 使用平方根分解求解线性方程组 mxa*x = b
+func LLUb2x(mxa [][]float64, b []float64) []float64 {
+	n := len(b)
+	ll := A2LL(mxa)
+	y := make([]float64, n)
+
+	for i := 0; i < n; i++ {
+		tmp := b[i]
+		for k := 0; k < i; k++ {
+			tmp -= ll[k][i] * y[k]
+		}
+		y[i] = tmp / ll[i][i]
+	}
+
+	x := make([]float64, n)
+	for i := n - 1; i >= 0; i-- {
+		tmp := y[i]
+		for k := i + 1; k < n; k++ {
+			tmp -= ll[k][i] * x[k]
+		}
+		x[i] = tmp / ll[i][i]
+	}
+	return x
+}
+
+// A2LU 对矩阵进行LU分解
 func A2LU(mx [][]float64) [][]float64 {
 	n := len(mx)
 	//计算U第1行，L第1列
@@ -112,8 +161,10 @@ func A2LU(mx [][]float64) [][]float64 {
 	return mx
 }
 
-func LUb2x(lu [][]float64, b []float64) []float64 {
+// LUb2x 使用LU分解法求解方程组
+func LUb2x(mxa [][]float64, b []float64) []float64 {
 	n := len(b)
+	lu := A2LU(mxa)
 	y := make([]float64, n)
 	y[0] = b[0]
 	for i := 1; i < n; i++ {
@@ -146,14 +197,12 @@ func martixMulLiner(hi [][]float64, x []float64) []float64 {
 }
 
 func lab62(n int) (r, dx float64) {
-
 	hn := Hilbert(n)
 	x := make([]float64, n)
 	for i := 0; i < n; i++ {
 		x[i] = 1.0
 	}
 	b := martixMulLiner(hn, x)
-	hn = A2LU(hn)
 	xhat := LUb2x(hn, b)
 	fmt.Println(xhat)
 	r = NormInf(b, martixMulLiner(Hilbert(n), xhat))
@@ -167,29 +216,33 @@ func main() {
 	fmt.Println("Hilbert(3)条件数", CondInfWithInverse(Hilbert(3), InHilbert(3)))
 	fmt.Println("Hilbert(4)条件数", CondInfWithInverse(Hilbert(4), InHilbert(4)))
 
-	h10 := Hilbert(10)
 	x := []float64{1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
-	b := martixMulLiner(h10, x)
-	h10 = A2LU(h10)
-	xhat := LUb2x(h10, b)
+	b := martixMulLiner(Hilbert(10), x)
+	//h10 = A2LU(h10)
+	xhat := LUb2x(Hilbert(10), b)
 	fmt.Println(xhat)
 	r := NormInf(b, martixMulLiner(Hilbert(10), xhat))
 	dx := NormInf(x, xhat)
 	fmt.Println(r, dx)
 
 	b[0] = b[0] + 1e-7
-	x = LUb2x(h10, b)
-	fmt.Println(x)
+	xhat = LUb2x(Hilbert(10), b)
+	fmt.Println(xhat)
 	r = NormInf(b, martixMulLiner(Hilbert(10), xhat))
 	dx = NormInf(x, xhat)
 	fmt.Println("1e-7", r, dx)
-
 	fmt.Println()
 
-	for i := 3; i < 25; i++ {
-		r, dx := lab62(i)
-		if r > 1 || dx > 1 {
-			break
-		}
-	}
+	xhat = LLUb2x(Hilbert(10), x)
+	fmt.Println(xhat)
+	r = NormInf(b, martixMulLiner(Hilbert(10), xhat))
+	dx = NormInf(x, xhat)
+	fmt.Println(r, dx)
+
+	// for i := 3; i < 25; i++ {
+	// 	r, dx := lab62(i)
+	// 	if r > 1 || dx > 1 {
+	// 		break
+	// 	}
+	// }
 }
