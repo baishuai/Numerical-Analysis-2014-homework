@@ -1,8 +1,8 @@
 /*
 * @Author: Bai Shuai
 * @Date:   2014-05-12 18:45:55
-* @Last Modified by:   bai
-* @Last Modified time: 2014-05-31 14:01:21
+* @Last Modified by:   Bai Shuai
+* @Last Modified time: 2014-05-31 15:35:18
  */
 
 package main
@@ -10,6 +10,7 @@ package main
 import (
 	"fmt"
 	"math"
+	"time"
 )
 
 // Hilbert 返回n阶Hilbert矩阵
@@ -91,22 +92,26 @@ func CondInfWithInverse(mx, imx [][]float64) float64 {
 	return NormMInf(mx) * NormMInf(imx)
 }
 
-// A2LL 对矩阵进行LL分解（平方根）
+// A2LL 对矩阵进行LL分解（改进平方根法）
 func A2LL(mx [][]float64) [][]float64 {
 	n := len(mx)
-	for j := 0; j < n; j++ {
-		var tmp float64
-		for k := 0; k < j; k++ {
-			tmp -= mx[j][k] * mx[j][k]
-		}
-		mx[j][j] = math.Sqrt(mx[j][j] - tmp)
-		for i := j + 1; i < n; i++ {
-			var tmp float64
+	for i := 1; i < n; i++ {
+		for j := 0; j < i; j++ {
+			// mx[j][i] = mx[i][j]
+			// tmp := mx[j][i]
 			for k := 0; k < j; k++ {
-				tmp -= mx[i][k] * mx[j][k]
+				mx[j][i] -= mx[k][i] * mx[j][k]
 			}
-			mx[i][j] = (mx[i][j] - tmp) / mx[j][j]
+			// mx[j][i] = tmp
 		}
+		for j := 0; j < i; j++ {
+			mx[i][j] = mx[j][i] / mx[j][j]
+		}
+		//tmp := mx[i][i]
+		for k := 0; k < i; k++ {
+			mx[i][i] -= mx[k][i] * mx[i][k]
+		}
+		//mx[i][i] = tmp
 	}
 	return mx
 }
@@ -117,21 +122,23 @@ func LLUb2x(mxa [][]float64, b []float64) []float64 {
 	ll := A2LL(mxa)
 	y := make([]float64, n)
 
-	for i := 0; i < n; i++ {
+	y[0] = b[0]
+	for i := 1; i < n; i++ {
 		tmp := b[i]
 		for k := 0; k < i; k++ {
-			tmp -= ll[k][i] * y[k]
+			tmp -= ll[i][k] * y[k]
 		}
-		y[i] = tmp / ll[i][i]
+		y[i] = tmp
 	}
 
 	x := make([]float64, n)
-	for i := n - 1; i >= 0; i-- {
-		tmp := y[i]
+	x[n-1] = y[n-1] / ll[n-1][n-1]
+	for i := n - 2; i >= 0; i-- {
+		tmp := y[i] / ll[i][i]
 		for k := i + 1; k < n; k++ {
 			tmp -= ll[k][i] * x[k]
 		}
-		x[i] = tmp / ll[i][i]
+		x[i] = tmp
 	}
 	return x
 }
@@ -144,13 +151,11 @@ func A2LU(mx [][]float64) [][]float64 {
 		mx[i][0] = mx[i][0] / mx[0][0]
 	}
 	for r := 1; r < n; r++ {
-		//mx[r][i]
 		for i := r; i < n; i++ {
 			for k := 0; k < r; k++ {
 				mx[r][i] -= mx[r][k] * mx[k][i]
 			}
 		}
-
 		for i := r + 1; i < n; i++ {
 			for k := 0; k < r; k++ {
 				mx[i][r] -= mx[i][k] * mx[k][r]
@@ -233,16 +238,33 @@ func main() {
 	fmt.Println("1e-7", r, dx)
 	fmt.Println()
 
-	xhat = LLUb2x(Hilbert(10), x)
+	x = []float64{1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
+	b = martixMulLiner(Hilbert(10), x)
+	xhat = LLUb2x(Hilbert(10), b)
 	fmt.Println(xhat)
 	r = NormInf(b, martixMulLiner(Hilbert(10), xhat))
 	dx = NormInf(x, xhat)
 	fmt.Println(r, dx)
 
-	// for i := 3; i < 25; i++ {
-	// 	r, dx := lab62(i)
-	// 	if r > 1 || dx > 1 {
-	// 		break
-	// 	}
-	// }
+	fmt.Printf("\nLU分解法与改进平方根分解法各运行100000次的时间\n")
+
+	now := time.Now()
+	for i := 0; i < 100000; i++ {
+		LUb2x(Hilbert(10), b)
+	}
+	fmt.Println(time.Now().Sub(now).String())
+
+	now = time.Now()
+	for i := 0; i < 100000; i++ {
+		LLUb2x(Hilbert(10), b)
+	}
+	fmt.Println(time.Now().Sub(now).String())
+
+	fmt.Printf("\n增大希尔伯特矩阵的阶，观察误差\n")
+	for i := 3; i < 25; i++ {
+		r, dx := lab62(i)
+		if r > 1 || dx > 1 {
+			break
+		}
+	}
 }
