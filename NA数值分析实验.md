@@ -45,7 +45,7 @@ Lagrange 差值, Runge 现象
 
 * 矩阵三角分解(LU 分解)的方法  
 * 微小偏差对解的影响（病态矩阵）  
-* [ ] 平方根法(Cholesky 分解)
+* [x] 平方根法(Cholesky 分解)
 
 ## 线性方程组的迭代解法 [lab7.go](#file-lab7-go) 未完成  
 
