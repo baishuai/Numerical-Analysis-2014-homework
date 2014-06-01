@@ -30,11 +30,11 @@ Lagrange 差值, Runge 现象
 这是目前用多项式做曲线拟合最好的计算方法
 
 
-## 数值积分 [lab4.go](#file-lab4-go) 未完成
+## 数值积分 [lab4.go](#file-lab4-go)
 
 * 复合 Simpson 求积公式  
 * Romberg 外推方法求积分
-* 复合 Gauss 公式(I)作近似积分
+* 复合 Gauss 公式作近似积分
 
 ## 非线性方程求根 [lab5.go](#file-lab5-go)
 
