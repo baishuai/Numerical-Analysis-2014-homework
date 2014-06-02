@@ -53,7 +53,7 @@ Lagrange 差值, Runge 现象
 
 幂法求出矩阵按模最大的特征值与对应的特征向量
 
-## 常微分方程初值问题数值解法 [lab9.go](#file-lab9-go)
+## 常微分方程初值问题数值解法 [lab9.go](#file-lab9-go) 未完成
 
 经典的四阶 Runge-Kutta 公式  
 四阶 Hamming 公式  
