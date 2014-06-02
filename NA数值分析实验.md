@@ -1,13 +1,11 @@
 2014年数值分析（蔡懿慈） 实验题解
 
-运行实验代码需要安装go
-安装方法
-ubuntu
-	`sudo apt-get install golang`
-osx
-	`brew install go`
-windows
-	下载二进制文件安装
+运行实验代码需要安装go  
+安装方法  
+* ubuntu  `sudo apt-get install golang`  
+* archlinux `sudo pacman -S go`
+* osx  `brew install go`  
+* windows  下载二进制文件安装
 
 每个实验独立一个go文件，相互之间没有依赖  
 对于无输入参数的可直接运行`go run labx.go`执行程序,`labx.go`为文件名  
@@ -51,7 +49,18 @@ Lagrange 差值, Runge 现象
 
 用Jacobi法，Gauss-Seidel法和SOR法求解线性方程组的解
 
-## 矩阵特征值问题 [lab8.go](#file-lab8-go) 
+## 矩阵特征值问题 [lab8.go](#file-lab8-go)
 
 幂法求出矩阵按模最大的特征值与对应的特征向量
 
+## 常微分方程初值问题数值解法 [lab9.go](#file-lab9-go)
+
+经典的四阶 Runge-Kutta 公式  
+四阶 Hamming 公式  
+Milne 公式  
+预测矫正系统
+
+本实习题目会遇到两个问题:  
+a)按给定步长积分时,积分终点与区间端点不重合。  
+b)多步法改变步长。
+试提出相应解决方法并实现之。
